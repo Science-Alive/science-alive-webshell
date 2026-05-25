@@ -8,6 +8,18 @@
     {
       "username": "guest1",
       "id": 1
+    },
+    {
+      "username": "guest2",
+      "id": 2
+    },
+    {
+      "username": "guest3",
+      "id": 3
+    },
+    {
+      "username": "guest4",
+      "id": 4
     }
   ]
 }

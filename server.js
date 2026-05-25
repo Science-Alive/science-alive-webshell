@@ -42,7 +42,7 @@ app.post('/api/login', (req, res) => {
 		const newGuest = {"username": username, "id": newID};
 		guests.guests.push(newGuest);
 
-		fs.writeFile(GUESTS_FILE, JSON.stringify(guests, null, 2), (err) => {
+		fs.writeFileSync(GUESTS_FILE, JSON.stringify(guests, null, 2), (err) => {
 			if (err) throw err;
 		});
 	}
@@ -55,7 +55,7 @@ app.post('/api/login', (req, res) => {
 		role = 'guest';
 		const token = crypto.randomBytes(32).toString('hex');
 		tokens.set(token, { username: username, role: role, expires: Date.now() + 8 * 60 * 60 * 1000 });
-		res.json({ token, username, role });
+		return res.json({ token, username, role });
 	}
 	else if (user){		//check if user 
 		//check if admin
@@ -67,7 +67,7 @@ app.post('/api/login', (req, res) => {
 		}
 		const token = crypto.randomBytes(32).toString('hex');
 		tokens.set(token, { username: username, role: role, expires: Date.now() + 8 * 60 * 60 * 1000 });
-		res.json({ token, username, role });
+		return res.json({ token, username, role });
 	}
 	else{
 		//reject user
