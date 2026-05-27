@@ -114,7 +114,8 @@ wss.on('connection', (ws, req) => {
 		'--pids-limit', '50',
 		'--security-opt=no-new-privileges',
 		'--env', `USERNAME=${username}`,
-		'--cap-drop', 'ALL',
+		//'--cap-drop', 'ALL',
+		//'--cap-add', 'CHOWN',
 		'--mount', `type=volume,source=${username},target=/home/student`,
 		'classroom-student'
 	], {
