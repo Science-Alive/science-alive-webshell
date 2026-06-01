@@ -5,13 +5,16 @@ const WebSocket = require('ws');
 const pty = require('node-pty');
 const path = require('path');
 const fs = require('fs');
+require('dotenv').config();
+
 
 const app = express();
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
-const USERS_FILE = path.join(__dirname, 'users.json');
-const GUESTS_FILE = path.join(__dirname, 'guests.json');
+const USERS_FILE = path.join(__dirname, 'userManagement/users.json');
+const GUESTS_FILE = path.join(__dirname, 'userManagement/guests.json');
+const class_password = process.env.class_password;
 tokens = new Map();
 
 app.use(express.static(path.join(__dirname, 'public')));
@@ -27,7 +30,7 @@ app.post('/api/login', (req, res) => {
 	const guests = JSON.parse(fs.readFileSync(GUESTS_FILE, 'utf8'));
 
 	//check if new guest account is being created
-	if (username == 'ScienceAliveGuest' && password == guests.password){
+	if (username == 'ScienceAliveGuest' && password == class_password){
 		//create new guest account
 		let newID = 0;
 		if(guests.guests.length == 0){
@@ -49,9 +52,9 @@ app.post('/api/login', (req, res) => {
 	
 	let role = 'student';
 	let guest = guests.guests.find(s => s.username === username);
-	let user = users.find(s => s.username === username && s.password === password);
+	let user = users.users.find(s => s.username === username && s.password === password);
 
-	if (guest && password == guests.password){		//check if guest
+	if (guest && password == class_password){		//check if guest
 		role = 'guest';
 		const token = crypto.randomBytes(32).toString('hex');
 		tokens.set(token, { username: username, role: role, expires: Date.now() + 8 * 60 * 60 * 1000 });
@@ -74,6 +77,32 @@ app.post('/api/login', (req, res) => {
 		role = null;
 		return res.status(401).json({ error: 'Invalid username or password' });
 	}
+});
+
+
+app.post('/api/sign-up', (req, res) => {
+	let { username, password } = req.body;
+	const users = JSON.parse(fs.readFileSync(USERS_FILE, 'utf8'));
+	
+	//check if username already exists
+	let user = users.users.find(s => s.username === username);
+	if(user){
+		return res.status(401).json({ error: 'User already exists. Please pick a new username.' });
+	}
+
+	//if user does not exist check if password matches 
+	if(password != class_password){
+		return res.status(401).json({ error: 'Incorrect password.' });
+	}
+
+	//if user does not already exists and password matches add the user to json
+	const newUser = {"username": username, "password": class_password};
+	users.users.push(newUser);
+
+	fs.writeFileSync(USERS_FILE, JSON.stringify(users, null, 2), (err) => {
+		if (err) throw err;
+	});
+	return res.json({ username });
 });
 
 function validateToken(token) {
@@ -114,8 +143,8 @@ wss.on('connection', (ws, req) => {
 		'--pids-limit', '50',
 		'--security-opt=no-new-privileges',
 		'--env', `USERNAME=${username}`,
-		//'--cap-drop', 'ALL',
-		//'--cap-add', 'CHOWN',
+		'--cap-drop', 'ALL',
+		'--cap-add', 'CHOWN',
 		'--mount', `type=volume,source=${username},target=/home/student`,
 		'classroom-student'
 	], {

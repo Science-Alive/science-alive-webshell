@@ -1,8 +1,0 @@
-[
-    { "username": "ScienceAliveAdmin", "password": "1234" },
-    { "username": "ScienceAliveGuest", "password": "1234" },
-
-    { "username": "Alice", "password": "1234" },
-    { "username": "Bob",   "password": "1234" }
-]
-

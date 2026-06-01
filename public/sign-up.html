@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Login</title>
+  <title>Sign Up</title>
   <link rel="stylesheet" href="/style.css"/>
 </head>
 <body>
@@ -21,37 +21,23 @@
     <label>Username</label>
     <input type="text" id="username"/>
 
-    <label>Password</label>
+    <label>Class Password</label>
     <input type="text" id="password"/>
 
-    <button class="btn" id="loginBtn" onclick="login()">Log In</button>
-    <a href="sign-up.html" class="redirect-button">Create Account</a>
-
-
-    <div style="border-top: 0.5px solid var(--border); padding-top: 16px; margin-top: 20px; display: flex; flex-direction: column; gap: 8px;">
-      <p style="font-size: 15px; color: var(--text); display: flex; align-items: center; gap: 8px;">
-    	Admin username: ScienceAliveAdmin
-      </p>
-      <p style="font-size: 15px; color: var(--text); display: flex; align-items: center; gap: 8px;">
-        Guest create: ScienceAliveGuest + guest password
-      </p>
-      <p style="font-size: 15px; color: var(--text); display: flex; align-items: center; gap: 8px;">
-        Guest log in: guestX + guest password
-      </p>
-    </div>
+    <button class="btn" id="signUpbtn" onclick="signUp()">Sign Up</button>
 
     <div class="error" id="error"></div>
   </div>
 
   <script>
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') login();
+      if (e.key === 'Enter') signUp();
     });
 
-    async function login() {
+    async function signUp() {
       const username = document.getElementById('username').value.trim();
       const password = document.getElementById('password').value;
-      const btn = document.getElementById('loginBtn');
+      const btn = document.getElementById('signUpbtn');
       const error = document.getElementById('error');
 
       if (!username || !password) {
@@ -60,7 +46,45 @@
       }
 
       btn.disabled = true;
-      btn.textContent = 'Logging in…';
+      btn.textContent = 'Signing up…';
+      error.textContent = '';
+
+      try {
+        
+        //send sign up request to server
+        const res = await fetch('/api/sign-up', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password })
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          error.textContent = data.error || 'Sign up failed.';
+          btn.disabled = false;
+          btn.textContent = 'Sign Up';
+          return;
+        }
+
+        //if request successful call login function
+        login(username, password);
+
+      } catch (e) {
+        error.textContent = 'Could not reach the server.';
+        btn.disabled = false;
+        btn.textContent = 'Sign Up';
+      }
+    }
+
+    async function login(username, password) {
+      const error = document.getElementById('error');
+
+      if (!username || !password) {
+        error.textContent = 'Error logging in.';
+        return;
+      }
+
       error.textContent = '';
 
       try {
@@ -76,15 +100,11 @@
 
         if (!res.ok) {
           error.textContent = data.error || 'Login failed.';
-          btn.disabled = false;
-          btn.textContent = 'Log In';
           return;
         }
-
         
         sessionStorage.setItem('token', data.token)
         sessionStorage.setItem('username', data.username);
-        
 
         //if request successful redirect to terminal
         window.location.href = `/terminal.html`;
