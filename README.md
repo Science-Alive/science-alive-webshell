@@ -1,4 +1,4 @@
-# class-webshell
+# science-alive-webshell
  
 A web-based terminal emulator for classroom use. Students connect through a browser and get an isolated Ubuntu environment to explore.
  
@@ -32,11 +32,18 @@ docker --version
  
 ## 3. Set up environment variables
  
-Create a `.env` file in the project root:
+Copy `.env.example` to `.env` and set the class password:
+
+```bash
+cp .env.example .env
+```
 
 ```
 class_password=yourpasswordhere
 ```
+
+This single password is used by everyone to log in, sign up, and create guest
+accounts. The server refuses to start if it is not set.
  
 ## 4. Build the student Docker image
  
@@ -83,18 +90,23 @@ pm2 stop server     # stop the server
  
 ## Managing students
  
-Students are stored in `userManagement/users.json`.
+Students are stored in `userManagement/users.json` as usernames only — there are
+no per-user passwords. Everyone authenticates with the shared `class_password`
+from `.env`.
  
 ```json
 {
   "users": [
-    { "username": "alice", "password": "yourclasspassword" },
-    { "username": "bob",   "password": "yourclasspassword" }
+    { "username": "ScienceAliveAdmin" },
+    { "username": "alice" },
+    { "username": "bob" }
   ]
 }
 ```
 
-Users can make their own account with the class password.
+Students can create their own account from the Sign Up page using the class
+password. Guest accounts (`guestN`) are generated automatically and stored in
+`userManagement/guests.json`, which is runtime data and is not tracked in git.
  
 ## Managing docker volumes
  

@@ -1,0 +1,9 @@
+=== ROPE SWING ===
+ 
+You grab the rope and launch yourself across the chasm.
+Halfway across the rope snaps.
+ 
+You plummet into darkness and land with a splash
+in an underground lake far below.
+ 
+  lake/    - Look around the lake.

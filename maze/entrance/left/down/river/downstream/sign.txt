@@ -1,0 +1,6 @@
+=== DOWNSTREAM ===
+ 
+You jump into the river and let the current carry you downstream. 
+The further you go the lower the cave ceiling gets, forcing you to swim closer to the surface. 
+Eventually the gap between the water and the rock above closes entirely. 
+There is no way forward. You must swim back against the current.

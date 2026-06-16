@@ -80,11 +80,16 @@
     
 
     function connect() {
-      let token = sessionStorage.getItem('token');
-      let username = sessionStorage.getItem('username');
-      
+      const token = sessionStorage.getItem('token');
+
+      // no session → back to the login page
+      if (!token) {
+        window.location.href = '/index.html';
+        return;
+      }
+
       const protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-      ws = new WebSocket(`${protocol}://${location.host}?username=${username}&token=${token}`);
+      ws = new WebSocket(`${protocol}://${location.host}?token=${token}`);
 
       ws.onopen = () => {
         setStatus('connected', 'Connected');
@@ -104,7 +109,6 @@
 
       ws.onclose = () => {
         setStatus('', 'Disconnected');
-        showOverlay(true);
       };
     }
 

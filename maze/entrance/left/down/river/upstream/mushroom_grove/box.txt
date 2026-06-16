@@ -1,0 +1,6 @@
+A small wooden box, unlocked.
+Inside is a crystal ball.
+Upon touching it it begins to glow.
+Looking deeper into it you see:
+ 
+  The first number of the password is 4.

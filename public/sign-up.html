@@ -22,13 +22,14 @@
     <input type="text" id="username"/>
 
     <label>Class Password</label>
-    <input type="text" id="password"/>
+    <input type="password" id="password"/>
 
     <button class="btn" id="signUpbtn" onclick="signUp()">Sign Up</button>
 
     <div class="error" id="error"></div>
   </div>
 
+  <script src="/auth.js"></script>
   <script>
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') signUp();
@@ -50,15 +51,7 @@
       error.textContent = '';
 
       try {
-        
-        //send sign up request to server
-        const res = await fetch('/api/sign-up', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ username, password })
-        });
-
-        const data = await res.json();
+        const { res, data } = await postJson('/api/sign-up', { username, password });
 
         if (!res.ok) {
           error.textContent = data.error || 'Sign up failed.';
@@ -67,52 +60,13 @@
           return;
         }
 
-        //if request successful call login function
-        login(username, password);
+        // on success, log straight in (shared helper redirects to the terminal)
+        login(username, password, btn);
 
       } catch (e) {
         error.textContent = 'Could not reach the server.';
         btn.disabled = false;
         btn.textContent = 'Sign Up';
-      }
-    }
-
-    async function login(username, password) {
-      const error = document.getElementById('error');
-
-      if (!username || !password) {
-        error.textContent = 'Error logging in.';
-        return;
-      }
-
-      error.textContent = '';
-
-      try {
-        
-        //send login request to server
-        const res = await fetch('/api/login', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ username, password })
-        });
-
-        const data = await res.json();
-
-        if (!res.ok) {
-          error.textContent = data.error || 'Login failed.';
-          return;
-        }
-        
-        sessionStorage.setItem('token', data.token)
-        sessionStorage.setItem('username', data.username);
-
-        //if request successful redirect to terminal
-        window.location.href = `/terminal.html`;
-
-      } catch (e) {
-        error.textContent = 'Could not reach the server.';
-        btn.disabled = false;
-        btn.textContent = 'Log In';
       }
     }
   </script>

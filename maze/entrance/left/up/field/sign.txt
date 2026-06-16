@@ -1,0 +1,9 @@
+=== THE FIELD ===
+ 
+The field is overgrown and quiet.
+A battered scarecrow stands in the middle.
+To the east is a rotting barn.
+ 
+Sewn into the scarecrows chest is a scrap of paper.
+ 
+  barn/    - Head to the barn.

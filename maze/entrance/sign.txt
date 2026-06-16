@@ -1,0 +1,11 @@
+=== ENTRANCE ===
+ 
+You stand at the entrance of a dark underground maze.
+Two tunnels stretch before you.
+ 
+  left/    - A dimly lit passage. Cool air drifts out.
+  right/   - A wider tunnel. A low rumbling echoes from within.
+ 
+A stone tablet on the wall reads:
+  "Five fragments of the password are hidden in the maze.
+   Find them all to claim the treasure."

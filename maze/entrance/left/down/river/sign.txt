@@ -1,0 +1,7 @@
+=== THE RIVER BANK ===
+ 
+The river roars past. The current looks strong.
+A narrow path follows the river up stream.
+ 
+  upstream/      - Follow the narrow path upstream.
+  downstream/    - Jump in the river and swim downstream.

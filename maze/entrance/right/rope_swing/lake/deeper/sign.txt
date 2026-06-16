@@ -1,0 +1,6 @@
+=== THE DEEP ===
+ 
+You dive down. The water gets darker and colder.
+Through the murk you can make out the outline of old ruins.
+ 
+  ruins/    - Swim towards the ruins.

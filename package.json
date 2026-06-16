@@ -1,5 +1,5 @@
 {
-  "name": "classroom-terminal",
+  "name": "science-alive-webshell",
   "version": "1.0.0",
   "description": "Web-based Ubuntu terminal emulator for classroom use",
   "main": "server.js",

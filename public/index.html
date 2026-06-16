@@ -22,78 +22,36 @@
     <input type="text" id="username"/>
 
     <label>Password</label>
-    <input type="text" id="password"/>
+    <input type="password" id="password"/>
 
-    <button class="btn" id="loginBtn" onclick="login()">Log In</button>
+    <button class="btn" id="loginBtn" onclick="submitLogin()">Log In</button>
     <a href="sign-up.html" class="redirect-button">Create Account</a>
 
 
-    <div style="border-top: 0.5px solid var(--border); padding-top: 16px; margin-top: 20px; display: flex; flex-direction: column; gap: 8px;">
-      <p style="font-size: 15px; color: var(--text); display: flex; align-items: center; gap: 8px;">
-    	Admin username: ScienceAliveAdmin
-      </p>
-      <p style="font-size: 15px; color: var(--text); display: flex; align-items: center; gap: 8px;">
-        Guest create: ScienceAliveGuest + class password
-      </p>
-      <p style="font-size: 15px; color: var(--text); display: flex; align-items: center; gap: 8px;">
-        Guest log in: guestX + class password
-      </p>
+    <div class="login-hints">
+      <p>Admin username: ScienceAliveAdmin</p>
+      <p>Guest create: ScienceAliveGuest + class password</p>
+      <p>Guest log in: guestX + class password</p>
     </div>
 
     <div class="error" id="error"></div>
   </div>
 
+  <script src="/auth.js"></script>
   <script>
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') login();
+      if (e.key === 'Enter') submitLogin();
     });
 
-    async function login() {
+    function submitLogin() {
       const username = document.getElementById('username').value.trim();
       const password = document.getElementById('password').value;
       const btn = document.getElementById('loginBtn');
-      const error = document.getElementById('error');
-
-      if (!username || !password) {
-        error.textContent = 'Please enter your username and password.';
-        return;
-      }
 
       btn.disabled = true;
       btn.textContent = 'Logging in…';
-      error.textContent = '';
 
-      try {
-        
-        //send login request to server
-        const res = await fetch('/api/login', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ username, password })
-        });
-
-        const data = await res.json();
-
-        if (!res.ok) {
-          error.textContent = data.error || 'Login failed.';
-          btn.disabled = false;
-          btn.textContent = 'Log In';
-          return;
-        }
-
-        
-        sessionStorage.setItem('token', data.token)
-        sessionStorage.setItem('username', data.username);
-        
-
-        //if request successful redirect to terminal
-        window.location.href = `/terminal.html`;
-
-      } catch (e) {
-        error.textContent = 'Could not reach the server.';
-        btn.disabled = false;
-        btn.textContent = 'Log In';
-      }
+      login(username, password, btn);
     }
   </script>
 </body>

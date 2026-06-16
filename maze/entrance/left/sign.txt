@@ -1,0 +1,8 @@
+=== LADDER ROOM ===
+ 
+A small stone room with a wooden ladder in the centre.
+Faint light filters down from above.
+The sound of rushing water rises from below.
+ 
+  up/    - The ladder leads up towards the light.
+  down/  - The ladder descends into darkness.

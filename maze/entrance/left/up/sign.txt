@@ -1,0 +1,8 @@
+=== SURFACE ===
+ 
+You climb out into the open air.
+A grey sky stretches overhead.
+An open field stretches in front of you.
+In the distance you can see a barn.
+ 
+  field/    - Walk into the field.

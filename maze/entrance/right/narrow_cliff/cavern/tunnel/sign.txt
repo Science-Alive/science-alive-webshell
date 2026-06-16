@@ -1,0 +1,10 @@
+=== TUNNEL ===
+ 
+A massive stone door blocks the entrance of the tunnel. 
+At its centre is a rusted iron mechanism with slots for entering a combination. 
+It will not budge without the correct password.
+
+  To unlock the door you will need to run enter_password with the password as an argument.
+  Ex: ./enter_password ABC12
+ 
+  locked_door/  - Attempt to open the door.

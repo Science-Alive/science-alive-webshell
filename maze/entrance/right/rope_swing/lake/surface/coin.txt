@@ -1,0 +1,4 @@
+A gold coin with a strange symbol engraved on its face.
+It seems to be one part of the password.
+ 
+  SYMBOL:  "#"

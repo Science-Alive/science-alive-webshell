@@ -1,0 +1,12 @@
+=== GOBLIN DEN ===
+ 
+You squeeze through the small goblin sized hole and enter the den.
+It is clearly a home of sorts, though a very messy one.
+Scraps of food, broken furniture and stolen trinkets
+cover every surface. An empty firepit smoulders in the centre.
+The goblin does not seem to be home right now.
+ 
+Doorways lead to what looks like a treasury and an armory.
+ 
+  treasure_room/    - Enter the goblin treasury.
+  armory/           - Enter the armory.

@@ -1,0 +1,14 @@
+A scrap of parchment pinned to the wall with a knife.
+It appears to be a list written in clumsy handwriting:
+ 
+  THINGS I HAVE COLLECTED:
+  - 3 swords (two broken)
+  - 1 helmet (dented)
+  - lots of coins (not enough)
+  - a scroll with some words on it
+  - some bones (decorative)
+  - a shiny rock (very good)
+ 
+  TO DO:
+  - get more stuff
+  - find the rest of the password

@@ -1,0 +1,8 @@
+=== HIDDEN KNIFE ===
+
+After closer inspection of the armory you see a faint glowing coming from behind one of the crates.
+Wedged between the crate and the wall is a knife unlike the others.
+Its blade shimmers with a cold blue light.
+Inscribed on the knife is a glyph.
+
+  GLYPH: "~[*]~"

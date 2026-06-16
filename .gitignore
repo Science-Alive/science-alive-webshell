@@ -1,5 +1,5 @@
-# users
-userManagement
+# runtime-generated guest accounts (users.json is kept as a seed)
+userManagement/guests.json
 
 # Logs
 logs

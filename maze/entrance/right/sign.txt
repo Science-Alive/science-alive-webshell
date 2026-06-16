@@ -1,0 +1,9 @@
+=== THE CHASM ROOM ===
+ 
+A vast room with a deep chasm splitting the floor in two.
+On the far side you can see a door.
+The rumbling seems to be coming from the chasm.
+How will you cross?
+ 
+  rope_swing/      - A thick rope hangs above the chasm. Risky.
+  narrow_cliff/    - A narrow ledge runs along the wall. Slow but steady.

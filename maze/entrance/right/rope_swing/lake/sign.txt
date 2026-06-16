@@ -1,0 +1,8 @@
+=== THE UNDERGROUND LAKE ===
+ 
+The lake is enormous. The water is icy cold. 
+A thundering waterfall pours from a crack in the 
+cave ceiling far above, its roar echoing off the walls.
+ 
+  surface/    - Swim to a rocky ledge and climb out.
+  deeper/     - Dive deeper into the lake.

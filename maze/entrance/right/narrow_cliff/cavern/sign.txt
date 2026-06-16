@@ -1,0 +1,12 @@
+=== THE GREAT CAVERN ===
+ 
+You step through the opening and catch your breathe.
+The cavern is enormous, the ceiling disappears into darkness far above.
+The sound of dripping water echoes all around.
+ 
+Across the cavern floor, a faint warm light glows in the distance.
+As your eyes adjust you can make out the shape of a shrine.
+To one side a tunnel opening is visible.
+ 
+  shrine/    - Cross the cavern towards the light.
+  tunnel/    - Enter the tunnel.

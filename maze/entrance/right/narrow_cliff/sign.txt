@@ -1,0 +1,10 @@
+=== NARROW CLIFF ===
+ 
+You press yourself against the wall and inch along the ledge.
+It takes a while but you make it across.
+The passage opens up on the other side.
+A cold breeze comes from a large cavern ahead.
+Just before the cavern is a small burrow in the wall.
+ 
+  goblin_den/    - Squeeze into the burrow.
+  cavern/        - Head towards the cold breeze.

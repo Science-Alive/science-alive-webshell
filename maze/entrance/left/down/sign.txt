@@ -1,0 +1,6 @@
+=== UNDERGROUND RIVER ===
+ 
+The air is cold and damp. A fast-moving river cuts through
+the cave floor, glowing faintly blue.
+ 
+  river/    - Approach the river.

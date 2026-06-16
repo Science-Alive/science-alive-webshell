@@ -55,6 +55,10 @@ int main(int argc, char *argv[]) {
         if(remove("unlocked_door/treasure.txt") != 0){
             perror("Error removing treasure");
         }
+        //the hidden note must go too, otherwise the directory is not empty
+        if(remove("unlocked_door/.secret_note.txt") != 0){
+            perror("Error removing secret note");
+        }
         if (rmdir("unlocked_door") != 0) {
             perror("Error removing old door");
         }

@@ -1,0 +1,7 @@
+=== Upstream ===
+ 
+You follow the river upstream. 
+The cave narrows and the sound of the water grows louder. 
+Around a bend the path opens into a glowing underground mushroom grove.
+
+mushroom_grove/   - Enter the mushroom grove
