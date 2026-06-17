@@ -1,0 +1,40 @@
+=======================================================================
+                   A LETTER LEFT FOR THE TRAVELLER
+=======================================================================
+You find this scroll tucked into your pack. The handwriting is spidery
+and old, and the ink still smells faintly of woodsmoke.
+
+
+  Traveller,
+
+  If you are reading this, you have come seeking the treasure that my
+  maze is said to guard. Good. Most turn back at the entrance.
+
+  I am the Wizard who built these tunnels, long ago, and I do not let
+  just anyone reach what lies at their heart. The maze is a test.
+  Hidden through its twisting passages are FIVE FRAGMENTS of a secret
+  password. Find all five, speak them at the locked door, and what
+  waits beyond is yours to keep.
+
+  A few words before you set out:
+    - Every room holds a sign. READ IT before you wander on.
+    - Some passages are dead ends. Some are hidden from plain sight.
+    - Goblins and a troll have made homes in my maze. What belongs to
+      them is not yours to take, and the maze itself will see to that.
+
+  I will be watching how you travel. It has been many years since I
+  took on an apprentice, and I am beginning to think it is time...
+  but first, find your way through.
+
+                                                            -- W.
+
+
+-----------------------------------------------------------------------
+  Your journey begins in the MAZE folder. To start exploring, try:
+
+      ls            - look around you
+      cd MAZE       - step into the maze
+      cat sign.txt  - read the sign in a room
+
+  Lost in the dark? Type  cd ~  to return home and begin again.
+=======================================================================

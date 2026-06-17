@@ -25,6 +25,8 @@
       <span id="statusText">Connecting…</span>
     </div>
     <div class="spacer"></div>
+    <label class="theme-label" for="themeSelect">⚒ Theme</label>
+    <select id="themeSelect" class="theme-select" title="Terminal color scheme"></select>
   </header>
 
   <!-- Terminal -->
@@ -34,8 +36,11 @@
     </div>
   </div>
 
+  <script src="/themes.js"></script>
   <script>
     // ── xterm setup ──────────────────────────────────────────────────────────
+    const initialTheme = getSavedTheme();
+
     const term = new Terminal({
       fontFamily: '"JetBrains Mono", "Fira Code", monospace',
       fontSize: 14,
@@ -43,22 +48,12 @@
       cursorBlink: true,
       cursorStyle: 'block',
       scrollback: 5000,
-      theme: {
-        background:      '#0a0c10',
-        foreground:      '#c8d0e0',
-        cursor:          '#00e5a0',
-        cursorAccent:    '#0a0c10',
-        selectionBackground: 'rgba(0,229,160,0.2)',
-        black:   '#1e2230', brightBlack:   '#4a5270',
-        red:     '#ff4f6d', brightRed:     '#ff7088',
-        green:   '#00e5a0', brightGreen:   '#33ffb8',
-        yellow:  '#ffcd40', brightYellow:  '#ffe080',
-        blue:    '#00b8ff', brightBlue:    '#40cfff',
-        magenta: '#c678dd', brightMagenta: '#d99fe8',
-        cyan:    '#56d1e0', brightCyan:    '#80e8f0',
-        white:   '#c8d0e0', brightWhite:   '#ffffff',
-      }
+      theme: THEMES[initialTheme].term,
     });
+
+    // ── Theme selector (THEMES/applyTheme/buildThemeSelector come from themes.js) ──
+    buildThemeSelector(document.getElementById('themeSelect'), initialTheme, () => term);
+    applyTheme(initialTheme, term);
 
     const fitAddon = new FitAddon.FitAddon();
     const webLinksAddon = new WebLinksAddon.WebLinksAddon();

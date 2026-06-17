@@ -3,14 +3,17 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --bg:      #0d0f14;
-  --surface: #13161e;
-  --border:  #1e2230;
-  --accent:  #00e5a0;
-  --danger:  #ff4f6d;
-  --yellow:  #ffcd40;
-  --text:    #c8d0e0;
-  --muted:   #4a5270;
+  /* Defaults mirror the Torchlight (fantasy) theme so pages render correctly
+     before themes.js runs. applyTheme() overrides these at runtime. */
+  --bg:      #14100c;
+  --surface: #1d1812;
+  --border:  #3f3322;
+  --accent:  #ffb347;
+  --danger:  #ff6b4a;
+  --yellow:  #ffc857;
+  --text:    #f0e4c8;
+  --muted:   #b09872;
+  --logo-text: #fff6e6;
   --header-h: 52px;
 }
 
@@ -20,7 +23,10 @@ body {
   background: var(--bg);
   color: var(--text);
   font-family: 'JetBrains Mono', monospace;
+  transition: background 0.25s, color 0.25s;
 }
+
+header { transition: background 0.25s, border-color 0.25s; }
 
 /* ── Header ── */
 header {
@@ -37,11 +43,37 @@ header {
   font-family: 'Syne', sans-serif;
   font-weight: 800;
   font-size: 17px;
-  color: #fff;
+  color: var(--logo-text);
   display: flex;
   align-items: center;
   gap: 8px;
 }
+
+/* ── Theme selector ── */
+.theme-label {
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.5px;
+  text-transform: none;
+  margin-bottom: 0;
+  white-space: nowrap;
+}
+
+.theme-select {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  padding: 5px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.theme-select:hover,
+.theme-select:focus { border-color: var(--accent); }
 
 .logo-icon {
   width: 26px; height: 26px;
@@ -160,6 +192,24 @@ body {
 .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
 
 .btn-primary.full { width: 100%; }
+
+/* ── Redirect link (e.g. "Create Account") — themed, not browser-default ── */
+.redirect-button,
+.redirect-button:visited {
+  display: block;
+  text-align: center;
+  margin-top: 12px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  text-decoration: none;
+  color: var(--accent);
+  padding: 9px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.redirect-button:hover { border-color: var(--accent); }
 
 .btn-sm {
   font-family: 'JetBrains Mono', monospace;

@@ -1,0 +1,47 @@
+=======================================================================
+              THE WIZARD'S FORAGING MAP   --   for my apprentice
+=======================================================================
+You have proven yourself in my maze, so I am taking you on as my
+apprentice. This is a map of that same realm -- the one you just
+explored -- showing where each ingredient grows.
+
+  HOW TO FORAGE:
+    * Travel with your cursor ONLY -- normal mode, no arrow keys.
+    * Use  h j k l  to step,  w  b  to hop words,  f<char>  to dash
+      along a line, and  gg  G  0  $  to leap across the map.
+    * Land on an ingredient and press  x  a few times to pick it.
+    * Gather a whole recipe, then go brew it in the cauldron.
+    * Picking does not change the real map -- quit with  :q!  anytime.
+
+  YOUR FIRST RECIPE -- HEALTH POTION:
+      mushrooms  .  golden carrot  .  cave salt  .  stir
+  (stir happens at the cauldron, not out here in the wild)
+
+-----------------------------------------------------------------------
+
+      @@@ THE MUSHROOM GROVE @@@                   ___
+      @                       @                   /   \   THE CAVERN
+      @   [ mushrooms ]       @                  / /^\ \
+      @   [ thick root ]      @                 |  cave |
+      @                       @                 |  salt |
+      @@@@@@@@@@@@@@@@@@@@@@@@@@                  \_____/
+
+
+              ##### THE FIELD #####              ::::: THE BARN :::::
+              #                   #             :                   :
+              #  [ golden carrot ]#             :  [ moth wings ]   :
+              #  [ four leaf clover ]           :                   :
+              #####################             :::::::::::::::::::::
+
+
+      ~~~~ THE RIVER ~~~~                   /\/\ THE GOBLIN DEN /\/\
+      ~                  ~                  |  (firepit still warm) |
+      ~   [ newt ]       ~                  |  [ spider eye ]       |
+      ~                  ~                  |  [ dragons breath ]   |
+      ~~~~~~~~~~~~~~~~~~~~                   \_______________________/
+
+-----------------------------------------------------------------------
+  More recipes wait in  recipe_book.txt . Once you can travel without
+  the arrow keys, forage a potion of your own choosing and brew it.
+  Every ingredient in the book grows somewhere on this map.   -- W.
+=======================================================================

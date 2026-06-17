@@ -21,7 +21,14 @@ RUN useradd -m -s /bin/bash student && \
     usermod -aG monsters troll && \
     usermod -aG heroes wizard
 
-RUN echo "Welcome! Try: ls, pwd, cd, mkdir, cat, echo, vim" > /home/student/README.txt
+RUN echo "Welcome! Try: ls, pwd, cd, mkdir, cat, echo, vim" > /home/student/README.txt && \
+    echo "When you have learned 'cat', read your first quest: cat start_here.txt" >> /home/student/README.txt
+
+# The story scroll that frames the whole adventure: who you are, the Wizard,
+# and why you are entering the maze. Students cat this at the start of the maze
+# activity. Owned by student so it feels like their own letter.
+COPY home/start_here.txt /home/student/start_here.txt
+RUN chown student:student /home/student/start_here.txt
 
 # ── Maze ──────────────────────────────────────────────────────────────────────
 # The maze layout and all sign/note text live in the maze/ directory in this repo.
@@ -90,6 +97,13 @@ RUN chown student:student /home/student/POTIONS && \
 
 RUN chmod 777 /home/student/POTIONS/cauldron.c && \
     chmod 777 /home/student/POTIONS/recipe_book.txt
+
+# The foraging map is a cursor-navigation game seeded read-only so students can
+# practice vim motions (and "pick" ingredients with x in-buffer) without ever
+# being able to save over it. Owned by the wizard, mode 444.
+COPY training/forage_map.txt /home/student/POTIONS/forage_map.txt
+RUN chown wizard:heroes /home/student/POTIONS/forage_map.txt && \
+    chmod 444 /home/student/POTIONS/forage_map.txt
 
 # ── Docker ────────────────────────────────────────────────────────────────
 COPY scripts/startup.sh /startup.sh
