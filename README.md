@@ -88,6 +88,57 @@ pm2 restart server  # restart after changes
 pm2 stop server     # stop the server
 ```
  
+## Production hardening (public deployments)
+
+Students get an interactive shell with a compiler inside each container, and the
+server talks to the Docker daemon (≈ root). The per-container `docker run` flags in
+`server.js` already apply: `--network none`, `--cap-drop ALL`, `--read-only` root
+(with small tmpfs for `/tmp` and `/run`), `--memory`/`--cpus`/`--pids-limit`, and
+`--ulimit fsize` (50 MB max file). The items below are host-level and must be set up
+on the deployment VM — they are **not** in the repo.
+
+### 1. Docker daemon config — `/etc/docker/daemon.json`
+
+```json
+{
+  "userns-remap": "default",
+  "live-restore": true,
+  "log-driver": "json-file",
+  "log-opts": { "max-size": "10m", "max-file": "3" }
+}
+```
+
+- **`userns-remap`** is the key control: it maps container UIDs to an unprivileged
+  host UID range, so even a full in-container escalation is harmless on the host.
+- Apply with `sudo systemctl restart docker`, then confirm with
+  `docker info | grep -i userns`.
+- **Do this before students create volumes.** Enabling remap changes file ownership
+  expectations; pre-existing volumes won't be remapped and would break. If you
+  already have volumes, remove them (`docker volume rm <name>`) so they re-provision.
+
+> Note: the maze relies on **SUID** binaries (`enter_password`, `enter_glyph`) to
+> elevate the student to `wizard`. Do **not** add `--security-opt=no-new-privileges`
+> or `--privileged`, and keep the default seccomp/AppArmor profiles.
+
+### 2. Disk-exhaustion protection (XFS project quota)
+
+The `--ulimit fsize` flag caps a single file at 50 MB but not total volume usage.
+For real protection, put `/var/lib/docker/volumes` on an **XFS** filesystem mounted
+with `pquota` and set a project quota per user volume directory. Otherwise monitor
+host disk and alert.
+
+### 3. VM service account (Google Cloud)
+
+Give the Compute Engine VM a **minimal/empty service account** so a host compromise
+can't pivot into the GCP project. Combined with `--network none`, containers can't
+reach the metadata server (`169.254.169.254`) to steal credentials.
+
+### 4. Firewall & TLS
+
+Expose only `80`/`443` (and `22` for SSH); never expose port 8888 or the Docker
+daemon socket directly. Terminate TLS with Caddy or nginx + Let's Encrypt — the
+browser client connects over `wss://`, which requires HTTPS.
+
 ## Managing students
  
 Students are stored in `userManagement/users.json` as usernames only — there are

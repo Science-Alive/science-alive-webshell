@@ -5,6 +5,7 @@ const WebSocket = require('ws');
 const pty = require('node-pty');
 const path = require('path');
 const fs = require('fs');
+const { execFile } = require('child_process');
 require('dotenv').config();
 
 
@@ -33,6 +34,45 @@ app.use(express.json());
 
 
 // ── helpers ─────────────────────────────────────────────────────────────────
+
+// Usernames become the Docker container name and volume source, so they must be
+// safe Docker identifiers. This allowlist matches Docker's name rules and bounds
+// the length.
+const USERNAME_RE = /^[a-zA-Z0-9][a-zA-Z0-9_.-]{0,31}$/;
+
+// Names a self-service sign-up must not claim: in-image system users (spoofing /
+// confusion) and the special login identities. The admin still uses its own name
+// to get a terminal, so this list is only enforced at sign-up, not at connect.
+const RESERVED_USERNAMES = new Set([
+	'student', 'wizard', 'goblin', 'troll', 'root',
+	'ScienceAliveAdmin', 'ScienceAliveGuest',
+]);
+
+function isValidUsername(username) {
+	return typeof username === 'string' && USERNAME_RE.test(username);
+}
+
+// Is a container with exactly this name already running/present? Used to give a
+// friendly "session already active" message instead of a raw Docker name conflict.
+function containerExists(name, cb) {
+	execFile('docker', ['ps', '-aq', '--filter', `name=^${name}$`], (err, stdout) => {
+		if (err) return cb(false);   // on error, let `docker run` surface the real problem
+		cb(stdout.trim().length > 0);
+	});
+}
+
+// Remove any classroom containers left over from a previous server run so a crash
+// or restart doesn't strand stale containers (and block their --name on reconnect).
+function sweepOrphans() {
+	execFile('docker', ['ps', '-aq', '--filter', 'label=classroom=student'], (err, stdout) => {
+		if (err) return;
+		const ids = stdout.trim().split('\n').filter(Boolean);
+		if (ids.length === 0) return;
+		execFile('docker', ['rm', '-f', ...ids], () => {
+			console.log(`Cleaned up ${ids.length} orphaned classroom container(s).`);
+		});
+	});
+}
 
 function readJson(file) {
 	return JSON.parse(fs.readFileSync(file, 'utf8'));
@@ -105,6 +145,14 @@ app.post('/api/sign-up', (req, res) => {
 		return res.status(400).json({ error: 'Username and password are required.' });
 	}
 
+	// usernames become Docker container/volume names — enforce a safe allowlist
+	if (!isValidUsername(username)) {
+		return res.status(400).json({ error: 'Username must be 1-32 characters: letters, numbers, and . _ - only (must start with a letter or number).' });
+	}
+	if (RESERVED_USERNAMES.has(username)) {
+		return res.status(400).json({ error: 'That username is reserved. Please pick another.' });
+	}
+
 	const users = readJson(USERS_FILE);
 
 	// check if username already exists
@@ -140,16 +188,58 @@ wss.on('connection', (ws, req) => {
 	// derive identity from the token, never from the query string
 	const username = info.username;
 
+	// Defense-in-depth: usernames also reach `docker run` as the container name and
+	// volume source, so re-validate here even though login/sign-up already check.
+	if (!isValidUsername(username)) {
+		ws.close();
+		return;
+	}
+
+	// One session per account: the container is named after the user, so a second
+	// connection would hit a Docker name conflict. Tell the user plainly instead.
+	containerExists(username, (exists) => {
+		if (ws.readyState !== WebSocket.OPEN) return;
+		if (exists) {
+			ws.send(JSON.stringify({ type: 'output', data:
+				'\r\n\x1b[33mA session is already active for this account in another tab or window.\r\n' +
+				'Close it before opening a new one.\x1b[0m\r\n' }));
+			ws.send(JSON.stringify({ type: 'exit', exitCode: 0 }));
+			ws.close();
+			return;
+		}
+		startSession(ws, username);
+	});
+});
+
+// Spawns the hardened per-user container and bridges it to the WebSocket.
+function startSession(ws, username) {
 	const shell = pty.spawn('docker', [
 		'run', '--rm', '-it',
 		'--name', `${username}`,
+		'--label', 'classroom=student',
+		// ── Resource limits ──
 		'--memory', '40m',
 		'--cpus', '0.5',
 		'--pids-limit', '50',
-		'--security-opt=no-new-privileges',
-		'--env', `USERNAME=${username}`,
+		'--ulimit', 'nofile=1024:1024',
+		'--ulimit', 'core=0:0',
+		'--ulimit', 'fsize=52428800:52428800',   // 50 MB max single file (disk-bomb guard)
+		// ── Isolation ──
+		// No network at all: the maze is filesystem-only, so this blocks the GCP
+		// metadata server (169.254.169.254) and any internal scanning outright.
+		'--network', 'none',
+		// Drop every capability. The CMD runs as the non-root `student` user and the
+		// puzzle's SUID binaries elevate only to `wizard` (also non-root), so no
+		// capability is needed. NOTE: we intentionally do NOT pass no-new-privileges —
+		// it disables SUID and would break the enter_password/enter_glyph puzzle.
+		// Host safety comes from userns-remap (daemon.json), --network none and caps.
 		'--cap-drop', 'ALL',
-		'--cap-add', 'CHOWN',
+		// Read-only root filesystem; only the home volume and small tmpfs are writable.
+		// gcc needs a writable /tmp for intermediates.
+		'--read-only',
+		'--tmpfs', '/tmp:rw,nosuid,nodev,size=32m',
+		'--tmpfs', '/run:rw,nosuid,nodev,size=4m',
+		'--env', `USERNAME=${username}`,
 		'--mount', `type=volume,source=${username},target=/home/student`,
 		'classroom-student'
 	], {
@@ -178,10 +268,11 @@ wss.on('connection', (ws, req) => {
 	});
 
 	ws.on('close', () => { shell.kill(); });
-});
+}
 
 
 const PORT = process.env.PORT || 8888;
 server.listen(PORT, () => {
+	sweepOrphans();
 	console.log(`Terminal server running at http://localhost:${PORT}`);
 });
